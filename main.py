@@ -103,7 +103,7 @@ async def pay_card(message: types.Message):
     )
 
 # --- ТЕСТОВАЯ НАКРУТКА ---
-@dp.message(F.text == "🎁 Тест (Бесплатно)")
+@dp.message(F.text == "тест")
 async def test_drive(message: types.Message):
     u = users_db.get(message.from_user.id)
     if u['test_used'] and message.from_user.id != ADMIN_ID:
@@ -201,4 +201,5 @@ async def main():
 if __name__ == "__main__":
 
     asyncio.run(main())
+
 
