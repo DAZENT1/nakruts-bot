@@ -70,12 +70,20 @@ async def go_back(message: types.Message, state: FSMContext):
 # --- ПРОФИЛЬ ---
 @dp.message(F.text == "👤 Профиль")
 async def profile(message: types.Message):
-    u = users_db.get(message.from_user.id)
+    # Пытаемся достать данные, если их нет - ставим заглушки, чтобы бот не падал
+    user_id = message.from_user.id
+    u = users_db.get(user_id, {
+        'reg_date': '10.03.2026',
+        'total_orders': 0,
+        'total_subs': 0
+    })
+    
     text = (f"👤 **Профиль пользователя**\n\n"
-            f"🆔 Ваш TG ID: `{message.from_user.id}`\n"
+            f"🆔 Ваш TG ID: `{user_id}`\n"
             f"📅 Дата регистрации: {u['reg_date']}\n"
             f"📦 Всего заказов: {u['total_orders']}\n"
             f"📈 Накручено всего: {u['total_subs']} подп.")
+    
     await message.answer(text, parse_mode="Markdown")
 
 # --- ОПЛАТА КАРТОЙ ---
@@ -193,3 +201,4 @@ async def main():
 if __name__ == "__main__":
 
     asyncio.run(main())
+
